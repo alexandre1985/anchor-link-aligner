@@ -1,67 +1,49 @@
 // FUNCTIONS
 
-String.prototype.substringStartingFromChar = function(char) {
-    const index  = this.indexOf(char)
-    return this.substr(index)
-}
+function aligningAction(hashOfURL) {
 
-function isLinkWithinTheSamePage(url) {
-    const currentPagePathname = location.pathname
-    const currentHost = location.host
-    const currentProtocol = location.protocol
-
-    if(url.pathname === currentPagePathname && url.host === currentHost && url.protocol == currentProtocol) {
-        return true
+    if(! hashOfURL) {
+        return false
     }
 
-    return false
-}
-
-function aligningAction(hashOfURL) {
+    const elementThatTheAnchorTargets = document.querySelector(hashOfURL)
     
-    const targetElement = document.querySelector(hashOfURL)
-    
-    // distance (on the Y axis) between the top of the document or webpage and the begining of the targetElement
-    const targetYCoordinate = targetElement.offsetTop
+    // distance (on the Y axis) between the top of the document or webpage and the begining of the elementThatTheAnchorTargets
 
-    // make the scroll (correctly and also smoothly as a bonus)
+    const YCoordinateOfTheTargetElement = elementThatTheAnchorTargets.offsetTop
+
+    // make the scroll correctly (because it takes into account the sticky top bar)
 
     window.scrollTo({
-        top: targetYCoordinate - topBarHeight
+        top: YCoordinateOfTheTargetElement - topBarHeight
     })
-    
-    // make the click on this links part of history (to be able to retrogress)
-    // const targetHref = `${location.origin}${location.pathname}${location.search}${hashOfURL}`
-    const targetHref = `${location.origin}${location.pathname}${hashOfURL}`
-    history.pushState(null, null, targetHref)
 }
 
 
 // MAIN LOGIC
 
-// id of topBar
-const topBarId = 'topbar'
+// id of sticky top bar
+const topBarSelector = '#topbar'
 
-// fetch website top bar element
-const topBarElement = document.getElementById(topBarId)
+// fetch website for the sticky top bar element
+const topBarElement = document.querySelector(topBarSelector)
 
-// get top bar height
+// get sticky top bar height
 const topBarHeight = topBarElement.offsetHeight
 
-// 1. ON-LOAD LOGIC
+// 1. ON-LOAD (to address 'typing in the browser's address bar' when we are coming from outside of our website)
 
-window.onload = function() {
-    const pageHash = location.hash
-
-    if ( pageHash ) {
-
-        aligningAction(pageHash)
-
-    }
-
+window.onpopstate = function() {
+    aligningAction(location.hash)
 }
 
-// 2. ON-CLICK LOGIC
+// 2. ON-POPSTATE (to address 'typing in the browser's address bar' when we are coming within our website)
+
+window.onload = function() {
+    aligningAction(location.hash)
+}
+
+// 3. ON-CLICK (to address clicking on anchor links of our website)
 
 // fetch all elements that are anchor links that point to our website (internal anchor links)
 const anchorLinks = document.querySelectorAll('a[href*="#"]')
@@ -69,18 +51,14 @@ const anchorLinks = document.querySelectorAll('a[href*="#"]')
 // apply an event to those links
 for (let anchorElement of anchorLinks) {
     anchorElement.addEventListener('click', function(e) {
-
-        // if anchorElement is not pointing to an url of the same page, stop
-        // (which means:go towards that url and dont apply this anchor-link-aligner behaviour.
-        // Because a JS file domain of acting is only one page, either way)
-        if( ! isLinkWithinTheSamePage(this) ) {
-            return
-        }
-        
-
         aligningAction(this.hash)
 
-        // this is needed because we do not need the link to go to the anchor again, we already made the user arrive to the anchor link
+        // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() below
+        const targetHref = `${location.origin}${location.pathname}${this.hash}`
+        history.pushState(null, null, targetHref)
+
+        // this is required because the browser would align the page, without taking into account the stick top bar, after we have done the scroll alignment. Destroying the proper scroll alignment
         e.preventDefault()
+        e.stopPropagation()
     })
 }
