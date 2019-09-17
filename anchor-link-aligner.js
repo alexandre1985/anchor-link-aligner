@@ -6,9 +6,9 @@ String.prototype.substringStartingFromChar = function(char) {
 }
 
 function isLinkWithinTheSamePage(url) {
-    const currentPagePathname = window.location.pathname
-    const currentHost = window.location.host
-    const currentProtocol = window.location.protocol
+    const currentPagePathname = location.pathname
+    const currentHost = location.host
+    const currentProtocol = location.protocol
 
     if(url.pathname === currentPagePathname && url.host === currentHost && url.protocol == currentProtocol) {
         return true
@@ -31,7 +31,9 @@ function aligningAction(hashOfURL) {
     })
     
     // make the click on this links part of history (to be able to retrogress)
-    history.pushState(null, null, window.location.href)
+    // const targetHref = `${location.origin}${location.pathname}${location.search}${hashOfURL}`
+    const targetHref = `${location.origin}${location.pathname}${hashOfURL}`
+    history.pushState(null, null, targetHref)
 }
 
 
@@ -49,7 +51,7 @@ const topBarHeight = topBarElement.offsetHeight
 // 1. ON-LOAD LOGIC
 
 window.onload = function() {
-    const pageHash = window.location.hash
+    const pageHash = location.hash
 
     if ( pageHash ) {
 
