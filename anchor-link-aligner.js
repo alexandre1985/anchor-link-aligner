@@ -28,7 +28,6 @@ function aligningAction(hashOfURL) {
 
     window.scrollTo({
         top: targetYCoordinate - topBarHeight,
-        behavior: 'smooth'
     })
     
     // make the click on this links part of history (to be able to retrogress)
