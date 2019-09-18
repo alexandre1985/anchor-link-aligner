@@ -22,30 +22,30 @@ function aligningAction(hashOfURL) {
 
 // MAIN LOGIC
 
-// id of sticky top bar
+// id of top fixed nav bar
 const topBarSelector = '#topbar'
 
-// fetch website for the sticky top bar element
+// fetch website for the top fixed nav bar element
 const topBarElement = document.querySelector(topBarSelector)
 
-// get sticky top bar height
+// get top fixed nav bar height
 const topBarHeight = topBarElement.offsetHeight
 
 // 1. ON-LOAD (to address 'typing in the browser's address bar' when we are coming from outside of our website)
-
-window.onpopstate = function() {
-    aligningAction(location.hash)
-}
-
-// 2. ON-POPSTATE (to address 'typing in the browser's address bar' when we are coming within our website)
 
 window.onload = function() {
     aligningAction(location.hash)
 }
 
+// 2. ON-POPSTATE (to address 'typing in the browser's address bar' when we are coming within our website)
+
+window.onpopstate = function() {
+    aligningAction(location.hash)
+}
+
 // 3. ON-CLICK (to address clicking on anchor links of our website)
 
-// fetch all elements that are anchor links that point to our website (internal anchor links)
+// fetch all elements that are anchor links of our website. Ideally this would only be on anchor links that are point to our website
 const anchorLinks = document.querySelectorAll('a[href*="#"]')
 
 // apply an event to those links
@@ -53,11 +53,11 @@ for (let anchorElement of anchorLinks) {
     anchorElement.addEventListener('click', function(e) {
         aligningAction(this.hash)
 
-        // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() below
+        // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() code below
         const targetHref = `${location.origin}${location.pathname}${this.hash}`
         history.pushState(null, null, targetHref)
 
-        // this is required because the browser would align the page, without taking into account the stick top bar, after we have done the scroll alignment. Destroying the proper scroll alignment
+        // this is required because the browser would align the page, without taking into account the top fixed nav bar, after we already have done the correct scroll alignment. Without this lines, it would destroy the correct scroll alignment
         e.preventDefault()
         e.stopPropagation()
     })
