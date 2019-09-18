@@ -13,7 +13,7 @@ It is written in pure JavaScript, no need for JQuery or any JavaScript dependenc
 
 ## Usage
 
-1. Add the id "topbar" to your sticky top bar html element (if you don't like the "topbar" name, it is easily configurable, just edit one line at the source)
+1. Add the id "topbar" to your top fixed navigation bar html element (if you don't like the "topbar" name, it is easily configurable, just edit one line at the source)
 2. Add this script to your webpage.  
 I suggest you download this script and put it inside your JavaScript asset directory.  
 But, if you are lazy or you want to keep up with the latest update of this script (which I predict little *need for change to work* in the foreseen future), copy the code below into your html. I suggest you put it right before your html body closing tag (a html body closing tag looks like this `</body>`):
