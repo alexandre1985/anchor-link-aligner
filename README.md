@@ -9,7 +9,9 @@ The user may wonder that this is a *bug* and that the webpage creator is unprofe
 Well, they don't know that this is how html behaves, that is aligned to the anchor target destination **the same way** either you *have or don't have* a fixed navigation bar on top of your html page (that covers content).  
 This script takes into account that your website has a top fixed navigation bar and solves this issue.
 
-It is written in pure JavaScript, no need for JQuery or any JavaScript dependency. Fits every webpage.
+## Dependencies
+
+None. It is written in pure JavaScript, no need for JQuery or any JavaScript dependency. Fits every webpage.
 
 ## Usage
 
