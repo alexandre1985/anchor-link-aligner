@@ -3,10 +3,10 @@
 function aligningAction(hashOfURL) {
 
     if(! hashOfURL) {
-        return false
+        return
     }
 
-    const elementThatTheAnchorTargets = document.querySelector(hashOfURL)
+    const elementThatTheAnchorTargets = document.querySelector(hashOfURL) || topBarSelector
     
     // distance (on the Y axis) between the top of the document or webpage and the begining of the elementThatTheAnchorTargets
 
@@ -37,7 +37,8 @@ window.onload = function() {
     aligningAction(location.hash)
 }
 
-// 2. ON-POPSTATE (to address 'typing in the browser's address bar' when we are coming within our website)
+
+// 2. ON-POPSTATE (to address the action of "history changing" within our website)
 
 window.onpopstate = function() {
     aligningAction(location.hash)
@@ -51,6 +52,12 @@ const anchorLinks = document.querySelectorAll('a[href*="#"]')
 // apply an event to those links
 for (let anchorElement of anchorLinks) {
     anchorElement.addEventListener('click', function(e) {
+
+        // if not the same page; quit
+        if (location.pathname !== this.pathname) {
+            return
+        }
+
         aligningAction(this.hash)
 
         // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() code below
