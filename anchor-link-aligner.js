@@ -16,7 +16,6 @@ function aligningAction(hashOfURL, event, element=null) {
     // this is required because the browser would align the page, without taking into account the top fixed nav bar, after we already have done the correct scroll alignment. Without this lines, it would destroy the correct scroll alignment
     event.preventDefault()
     event.stopPropagation()
-    event.stopImmediatePropagation()
 
     const elementThatTheAnchorTargets = document.querySelector(hashOfURL) || topBarSelector
     
