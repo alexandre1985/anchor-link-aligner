@@ -1,12 +1,18 @@
 // FUNCTIONS
 
-function aligningAction(hashOfURL, event) {
+function aligningAction(hashOfURL, event, element=null) {
     
     // if there is no hash (in the link), no need to align
     if(! hashOfURL) {
         return
     }
     
+    // if different url pathname; dont do the .preventDefault(), just quit
+    if (element && location.pathname !== element.pathname) {
+        return
+    }
+
+
     // this is required because the browser would align the page, without taking into account the top fixed nav bar, after we already have done the correct scroll alignment. Without this lines, it would destroy the correct scroll alignment
     event.preventDefault()
     event.stopPropagation()
@@ -23,6 +29,11 @@ function aligningAction(hashOfURL, event) {
     window.scrollTo({
         top: YCoordinateOfTheTargetElement - topBarHeight
     })
+
+    // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() code below
+    const targetHref = `${location.origin}${location.pathname}${this.hash}`
+    history.pushState(null, null, targetHref)
+
 }
 
 
@@ -58,17 +69,6 @@ const anchorLinks = document.querySelectorAll('a[href*="#"]')
 // apply an event to those links
 for (let anchorElement of anchorLinks) {
     anchorElement.addEventListener('click', function(event) {
-
-        // if not the same page; quit
-        if (location.pathname !== this.pathname) {
-            return
-        }
-
-        aligningAction(this.hash, event)
-
-        // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() code below
-        const targetHref = `${location.origin}${location.pathname}${this.hash}`
-        history.pushState(null, null, targetHref)
-
+        aligningAction(this.hash, event, this)
     })
 }
