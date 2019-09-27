@@ -31,8 +31,11 @@ function aligningAction(hashOfURL, event, element=null) {
     })
 
     // make the click on this links part of history (to be able to retrogress) These lines are needed because of the .preventDefault() and/or(?) .stopPropogation() code below
-    const targetHref = `${location.origin}${location.pathname}${this.hash}`
-    history.pushState(null, null, targetHref)
+
+    if (element) {
+        const targetHref = `${location.origin}${location.pathname}${element.hash}`
+        history.pushState(null, null, targetHref)
+    }
 
 }
 
