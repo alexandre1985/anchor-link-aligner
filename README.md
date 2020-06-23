@@ -1,3 +1,5 @@
+( this repository now lives at [https://gitlab.com/alexandre1985/anchor-link-aligner.js/](https://gitlab.com/alexandre1985/anchor-link-aligner.js/) )
+
 # Anchor Link Aligner .JS
 
 This is a useful JavaScript for Webpages that have a top fixed navigation bar and anchor links.
